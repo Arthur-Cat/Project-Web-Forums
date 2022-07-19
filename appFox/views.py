@@ -1,12 +1,13 @@
 """Все импорты библиотек смотри в интернете..."""
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from appFox.models import Post, Comment
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, DetailView
 from .forms import FormPost, FormComit, UserRegisterForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-
+from django.contrib import messages #Для функций
+from django.contrib.messages.views import SuccessMessageMixin #Для классов
 
 """Методы для возврата значений, передаваемых в URL 'Нужно что бы сгенерировать страницу - (Контроллеры)'"""
 def index(req):
@@ -19,9 +20,13 @@ def index(req):
 #@permission_required('appFox.view_post')
 def about(req):
     return render(req, 'about.html')
+
+
 """Класс для создания и инициализации формы регистрации"""
-class RegisterForm(CreateView):
+""" SuccessMessageMixin = окно для отображение сообщения для пользователя. В офиц документаации есть информация о изменении движка"""
+class RegisterForm(SuccessMessageMixin, CreateView):
     form_class = UserRegisterForm
+    success_message = "%(username)s успешно зарегестрирован"
     template_name = 'register.html'
     success_url = reverse_lazy('login')
 
@@ -38,11 +43,28 @@ class DetailPostView(DetailView):
     template_name = 'detail_post.html'
 
 #Класс для создания поста
-class CrtPostView(LoginRequiredMixin, CreateView):
-    login_url = 'login'
-    model = Post
-    template_name = 'postCrt.html'
-    form_class = FormPost
+# class CrtPostView(LoginRequiredMixin, CreateView):
+#     login_url = 'login'
+#     model = Post
+#     template_name = 'postCrt.html'
+#     form_class = FormPost
+
+@login_required
+def create_post(request):
+    form = FormPost
+    if request.method == "POST":
+        form = FormPost(request.POST)
+        if form.is_valid():
+            form.save()
+            title = form.cleaned_data.get('title')
+            if title != 'POST':
+                messages.error(request, f"Все очень плохо у тебя")
+                return redirect('index')
+            messages.success(request, f"Публикация {title} опубликована.")
+            return redirect('index')
+            
+    return render(request, "postCrt.html", {'form': form})
+
 
 #Класс для изменения поста
 """LoginRequiredMixin используеться для  проверки авторизации пользователя и предоставление прав просмотра """
