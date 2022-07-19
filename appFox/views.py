@@ -4,8 +4,8 @@ from appFox.models import Post, Comment
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, DetailView
 from .forms import FormPost, FormComit, UserRegisterForm
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 """Методы для возврата значений, передаваемых в URL 'Нужно что бы сгенерировать страницу - (Контроллеры)'"""
@@ -13,7 +13,10 @@ def index(req):
     return render(req, 'index.html')
 
 """login_required - выдает ошибку если не авторизированный пользователь пытается зайти на страницу под ним"""
-@login_required
+""" permission_required - так же как логин, является декоратором. Выполняет те же функции по пирмишинам. Обязательно нужно передовать значения, так же может выводить ошибку"""
+"""permission - это доступы и права. Их можно предоставить пользователям через админ панель"""
+#@login_required
+#@permission_required('appFox.view_post')
 def about(req):
     return render(req, 'about.html')
 """Класс для создания и инициализации формы регистрации"""
@@ -23,7 +26,6 @@ class RegisterForm(CreateView):
     success_url = reverse_lazy('login')
 
 """Спец класс контролер, ограниченый в применении. Нужен для простоты работы"""
-"""LoginRequiredMixin """
 class PostsView(ListView):
     model = Post
     template_name = 'index.html'
@@ -43,6 +45,8 @@ class CrtPostView(LoginRequiredMixin, CreateView):
     form_class = FormPost
 
 #Класс для изменения поста
+"""LoginRequiredMixin используеться для  проверки авторизации пользователя и предоставление прав просмотра """
+
 class UpdPostView(LoginRequiredMixin, UpdateView):
     login_url = 'login'
     model = Post
