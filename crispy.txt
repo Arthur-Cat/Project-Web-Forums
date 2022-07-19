@@ -1,0 +1,13 @@
+Что бы воспользоваться библиотекой crispy и сделать красивые формы регистрации
+нужно загрузить её через pip install django-crispy-forms.
+Далее уже в настройках устанавливается нужный пакет CRISPY_TEMPLATE_PACK = '{poket}'
+(В текущем проекте работает пакет CRISPY_TEMPLATE_PACK = 'bootstrap4')
+Далее, так же он должен быть добавлен в INSTALLED_APPS. Добавляем 'crispy_forms'
+. В файле формы регистрации(html), в верху сайта, указывается {% load crispy_forms_tags %}
+в самом теле метода. Далее уже она применяеться. 
+
+
+https://github.com/django-crispy-forms/django-crispy-forms
+ссылка на официальный источник. 
+
+КРИСПИ ЭТО ФИЛЬТР! 

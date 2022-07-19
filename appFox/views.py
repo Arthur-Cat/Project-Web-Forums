@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from appFox.models import Post, Comment
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, DetailView
-from .forms import FormPost, FormComit
+from .forms import FormPost, FormComit, UserRegisterForm
 from django.urls import reverse_lazy
-
 
 """Методы для возврата значений, передаваемых в URL 'Нужно что бы сгенерировать страницу - (Контроллеры)'"""
 def index(req):
@@ -11,6 +10,11 @@ def index(req):
 
 def about(req):
     return render(req, 'about.html')
+"""Класс для создания и инициализации формы регистрации"""
+class RegisterForm(CreateView):
+    form_class = UserRegisterForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('login')
 
 """Спец класс контролер, ограниченый в применении. Нужен для простоты работы"""
 class PostsView(ListView):
