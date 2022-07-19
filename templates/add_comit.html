@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1>Добавить комментарий</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p  }}
+        <button class="btn btn-primary">Добавить</button>
+        <a href="{% url 'index' %}" class="btn btn-info">Вернуться</a>
+
+    </form>
+
+{% endblock %}

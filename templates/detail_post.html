@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1>Detail Post</h1>
+    <strong>{{ post.title}}</strong>
+    <p>{{ post.description}}<<p>
+    <p>{{ post.created_at}}</p>  
+    <hr>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" >
+    {% endif %}
+    <br>
+    <a href="{% url 'index' %}" class="btn btn-info">Вернуться</a>
+    <a href="{% url 'upd_post' post.pk %}" class="btn btn-primary">Редактировать</a>
+    <a href="{% url 'add_comit' post.pk %}" class="btn btn-warning">Оставить комментарий</a>
+    <br>
+    <br>
+    <h4>Комментарии</h4>
+    {% if post.comments.all %}
+        {% for comment in post.comments.all %}
+            <p> {{ comment.description }} - [{{ comment.created_at }}] </p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Добавьте первый комментарий</p>
+    {% endif %}
+{% endblock %}
