@@ -25,8 +25,12 @@
                         <th scope="col">Название</th>
                         <th scope="col">Описание</th>
                         <th scope="col">Дата публикации</th>
+                        {% if user.is_authenticated %}
+
                         <th scope="col">Редактировать</th>
                         <th scope="col">Удалить</th>
+                        {% endif %}
+
                     </tr>
                 </thead>
                 <tbody>
@@ -36,8 +40,10 @@
                             <td><a href="{% url 'detail_post' post.pk %}">{{ post.title}}</a></td>
                             <td>{{ post.description}}</td>
                             <th scope="row">{{ post.created_at}}</th>
+                            {% if user.is_authenticated %}
                             <td><a href="{% url 'upd_post' post.pk %}" class="btn btn-primary">Редактировать</a></td>
                             <td><a href="{% url 'del_post' post.pk %}" class="btn btn-danger"">Удалить</a></td>
+                            {% endif %}
                         </tr>     
                         {% endfor %}    
                     {% else %}

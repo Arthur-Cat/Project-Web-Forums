@@ -7,19 +7,11 @@
         {% csrf_token %}
         {{ form|crispy }}
         <br>
-        <button class="btn btn-primary">Вход</button>
+        <button class="btn btn-outline-primary">Вход</button>
     </form>
+    <br>
+    <small class="text-nuted">
+        Ещё нет аккаунта?<a href="register">  Зарегестрироваться</a>
+    </small>
 
 {% endblock %}
-
-<!-- {% extends 'index.html' %}
-
-{% block content %}
-    <h1>Выход из аккаунта</h1>
-    <p>Вы действительно хотите выйти из системы?</p>
-        <br>
-        <a href="logout" class="btn btn-primary">Выход</a>
-        <a href="index" class="btn btn-primary">Вернуться</a>
-    
-
-{% endblock %} -->

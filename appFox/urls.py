@@ -10,7 +10,7 @@ urlpatterns = [
     #path('', include('django.contrib.auth.urls')),    
     #Форма авторизации логику которой и отображение можно прописывать самостоятельно
     path('login', auth_vie.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout', auth_vie.LogoutView.as_view(), name='logout'),
+    path('logout', auth_vie.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('register', views.RegisterForm.as_view(), name='register'),
     path('', views.PostsView.as_view(), name='index'),
     path('post<int:pk>', views.DetailPostView.as_view(), name='detail_post'),
