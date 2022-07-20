@@ -20,4 +20,6 @@ urlpatterns = [
     path('del<int:pk>', views.DelPostView.as_view(), name='del_post'),
     path('post<int:pk>add_comit', views.AddComitView.as_view(), name='add_comit'),
     path('about/', views.about, name='about'),
+    path('upload/', views.upload, name='upload'),
+    path('download/', views.download, name='download'),
 ]

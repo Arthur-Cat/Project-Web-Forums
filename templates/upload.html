@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1>Загрузить файл</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="Загрузка файла"></label>
+        <input type="file" name="file">
+        <br>
+        <br>
+        <button class="btn btn-primary">Загрузить</button>
+    </form>
+    {% if url %}
+        <a href="{{url}}">{{url}}</a>
+    {% endif %}
+{% endblock %}

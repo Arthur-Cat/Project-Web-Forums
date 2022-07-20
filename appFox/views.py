@@ -1,4 +1,6 @@
 """Все импорты библиотек смотри в интернете..."""
+import csv
+import datetime
 from django.shortcuts import redirect, render
 from appFox.models import Post, Comment
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, DetailView
@@ -8,6 +10,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages #Для функций
 from django.contrib.messages.views import SuccessMessageMixin #Для классов
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
 
 """Методы для возврата значений, передаваемых в URL 'Нужно что бы сгенерировать страницу - (Контроллеры)'"""
 def index(req):
@@ -92,3 +96,23 @@ class AddComitView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
         return super().form_valid(form)
+
+"""Метод для загрузки файлов на сайт"""
+def upload(req):
+    context = {}
+    if req.method == "POST":
+        uploaded_file = req.FILES['file']
+        file = FileSystemStorage()
+        url_slag = file.save(uploaded_file.name, uploaded_file)
+        context['url'] = file.url(url_slag)
+    return render(req, "upload.html", context)
+
+def download(req):
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Title', 'Description', 'Created_at'])
+    for row in Post.objects.all().values_list('title', 'description', 'created_at'):
+        writer.writerow(row)
+    filename = str(datetime.datetime.now()) + 'posts.csv'
+    response['Content-Disposition'] = f"attachment; filename={filename}"
+    return response
